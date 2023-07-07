@@ -11,6 +11,8 @@ To start a conversation about a specific GitHub repository, follow these steps:
 3. Enter the GitHub repository link in the provided input field.
 4. You can now chat and ask questions about the repository, which will be answered by the integrated LLM model (Jurassic-2).
 
+If you are interested in exploring GitHub repositories using a Discord bot, you can also check out [RepoBot](https://github.com/pavanvnk/RepoBot). RepoBot simplifies GitHub exploration and collaboration within Discord communities.
+
 Please note that the responses may take some time to generate, especially for larger repositories or complex queries. The system will indicate when the model is actively processing a request.
 
 ## Future Enhancements
