@@ -1,3 +1,6 @@
+# Tmp folder created during execution
+cloned_repo/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
