@@ -14,8 +14,7 @@ def init_session_state():
         "db_path": None,
         "db_loaded": False,
         "ai21_token": None,
-        "repo_path": './cloned_repo',
-        'git_form': False
+        "repo_path": './cloned_repo'
     }
 
     for keys, values in SESSION_DEFAULTS.items():

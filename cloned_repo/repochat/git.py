@@ -32,4 +32,4 @@ def git_form(repo_path):
         with st.spinner(f"Cloning {db_name} Repository"):
             clone_repo(git_url, repo_path)
             st.success("Cloned successfully!")
-            return db_name, 1
+            return db_name

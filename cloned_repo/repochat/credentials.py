@@ -42,7 +42,7 @@ def credentials():
         st.session_state["al_token"] = al_token
         st.session_state["al_org_name"] = al_org_name
         st.session_state["ai21_token"] = ai21_token
-        st.success("Enter GitHub Repository Link")
+        st.success("Authentification successful!\n\nNow Enter GitHub Repository Link")
         return st.session_state["openai_token"], st.session_state["al_token"], st.session_state["al_org_name"], st.session_state["ai21_token"]
 
 # S3 deletion error -> Issue

@@ -29,20 +29,19 @@ credentials()
 
 if st.session_state["auth_ok"]:
     try:
-        db_name, st.session_state['git_form'] = git_form(st.session_state['repo_path'])
+        db_name = git_form(st.session_state['repo_path'])
 
-        if st.session_state['git_form']:
-            st.session_state["db_path"] = f"hub://{st.session_state['al_org_name']}/{db_name}"
+        st.session_state["db_path"] = f"hub://{st.session_state['al_org_name']}/{db_name}"
 
-            with st.spinner('Loading the contents to database. This may take some time...'):
-                vector_db(
-                    st.session_state["db_path"],
-                    st.session_state["al_token"],
-                    openai_embeddings(st.session_state["openai_token"]),
-                    load_to_db(st.session_state['repo_path'])
-                )
+        with st.spinner('Loading the contents to database. This may take some time...'):
+            vector_db(
+                st.session_state["db_path"],
+                st.session_state["al_token"],
+                openai_embeddings(st.session_state["openai_token"]),
+                load_to_db(st.session_state['repo_path'])
+            )
 
-            st.session_state["db_loaded"] = True
+        st.session_state["db_loaded"] = True
     except TypeError:
         pass
 
