@@ -3,3 +3,4 @@ streamlit==1.24.0
 langchain==0.0.225
 openai==0.27.8
 deeplake==3.6.7
+tiktoken==0.4.0
