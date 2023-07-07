@@ -29,7 +29,7 @@ credentials()
 
 if st.session_state["auth_ok"]:
     try:
-        repo_path, db_name = git_form()
+        db_name = git_form(st.session_state['repo_path'])
 
         st.session_state["db_path"] = f"hub://{st.session_state['al_org_name']}/{db_name}"
 
@@ -38,7 +38,7 @@ if st.session_state["auth_ok"]:
                 st.session_state["db_path"],
                 st.session_state["al_token"],
                 openai_embeddings(st.session_state["openai_token"]),
-                load_to_db(repo_path)
+                load_to_db(st.session_state['repo_path'])
             )
 
         st.session_state["db_loaded"] = True

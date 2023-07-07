@@ -1,10 +1,9 @@
-import os
 import requests
 import streamlit as st
 
 from .utils import url_name, clone_repo
 
-def git_form():
+def git_form(repo_path):
     with st.sidebar:
         st.title("GitHub Link")
         with st.form("git"):
@@ -31,7 +30,6 @@ def git_form():
                 st.stop()
         
         with st.spinner(f"Cloning {db_name} Repository"):
-            repo_path = os.path.join(os.getcwd(), "cloned_repo")
             clone_repo(git_url, repo_path)
             st.success("Cloned successfully!")
-            return repo_path, db_name
+            return db_name

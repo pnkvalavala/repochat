@@ -1,4 +1,6 @@
+import os
 import re
+import shutil
 import subprocess
 import streamlit as st
 
@@ -11,7 +13,8 @@ def init_session_state():
         "al_org_name": None,
         "db_path": None,
         "db_loaded": False,
-        "ai21_token": None
+        "ai21_token": None,
+        "repo_path": './cloned_repo'
     }
 
     for keys, values in SESSION_DEFAULTS.items():
@@ -30,8 +33,8 @@ def url_name(url):
         st.stop()
 
 def clone_repo(git_url, repo_path):
-    try:
-        subprocess.run(['git', 'clone', git_url, repo_path])
-    except Exception:
-        st.warning("Refresh the page")
-        st.stop()
+    if os.path.exists(repo_path):
+        shutil.rmtree(repo_path)
+
+    command = f'git clone {git_url}.git {repo_path} && rm -rf {repo_path}/.git'
+    subprocess.run(command, shell=True)
