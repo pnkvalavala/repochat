@@ -9,10 +9,6 @@ To compute the embeddings, we need OpenAI API. If you come across any reliable o
 You can sign up for OpenAI API and manage your API usage by visiting [here](https://platform.openai.com/account/api-keys)
 """
 
-ACTIVELOOP_ORG_NAME="""
-The organisation name is your username, or you can create new organisations [here](https://app.activeloop.ai/organization/new/create)
-"""
-
 ACTIVELOOP_TOKEN="""
 You can get an API key from the Deep Lake platform [here](https://www.activeloop.ai/)\n
 """
