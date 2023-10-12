@@ -1,7 +1,7 @@
 AUTHENTICATION_HELP = """
 Your credentials are only stored in your session state.\n
 The keys are neither exposed nor made visible or stored permanently in any way.\n
-Feel free to check out [the code base]("https://github.com/pavanvnk/repochat") to validate how things work.
+Feel free to check out [the code base]("https://github.com/pnkvalavala/repochat") to validate how things work.
 """
 
 OPENAI_HELP="""
@@ -13,6 +13,10 @@ ACTIVELOOP_TOKEN="""
 You can get an API key from the Deep Lake platform [here](https://www.activeloop.ai/)\n
 """
 
-AI21_TOKEN = """
-AI21 Labs Studio is free-to-use for everyone. Sign up for AI21 API [here](https://studio.ai21.com/sign-up/)
+HF_TOKEN = """
+You can get an Hugging Face Token from [here](https://huggingface.co/settings/tokens)
+"""
+
+HF_ENDPOINT = """
+Create an endpoint of your chosen model by following [these](https://huggingface.co/inference-endpoints) instructions
 """

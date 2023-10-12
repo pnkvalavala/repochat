@@ -19,9 +19,6 @@ def git_form(repo_path):
                 if response.status_code == 200 and url_name(git_url):
                     st.success("GitHub Link loaded successfully!")
                     db_name = url_name(git_url)
-                    # db_path = f"hub://{al_org_name}/{db_name}"
-                    # if not deeplake.exists(path=db_path, token=al_token):
-                    #     deeplake.rename(f"hub://{al_org_name}/check3", db_path, token=al_token)
                 else:
                     st.error("Enter Valid GitHub Repo")
                     st.stop()

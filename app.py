@@ -5,7 +5,7 @@ from repochat.utils import init_session_state
 from repochat.credentials import credentials
 from repochat.git import git_form
 from repochat.db import vector_db, load_to_db
-from repochat.models import openai_embeddings
+from repochat.models import *
 from repochat.chain import response_chain
 
 init_session_state()
@@ -15,7 +15,7 @@ st.set_page_config(
     page_icon="💻",
     initial_sidebar_state="expanded",
     menu_items={
-        'Report a bug': "https://github.com/pavanvnk/repochat/issues",
+        'Report a bug': "https://github.com/pnkvalavala/repochat/issues",
         'About': "No need to worry if you can't understand GitHub code or repositories anymore! Introducing RepoChat, where you can effortlessly chat and discuss all things related to GitHub repositories."
     }
 )
@@ -25,7 +25,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-credentials()
+embedding_option, llm_option = credentials()
 
 if st.session_state["auth_ok"]:
     try:
@@ -34,11 +34,14 @@ if st.session_state["auth_ok"]:
         if st.session_state['git_form']:
             st.session_state["db_path"] = f"hub://{st.session_state['al_org_name']}/{db_name}"
 
+            if embedding_option=='OpenAI':
+                embeddings = openai_embeddings(st.session_state["openai_token"])
+            else:
+                embeddings = hf_embeddings()
+
             with st.spinner('Loading the contents to database. This may take some time...'):
                 vector_db(
-                    st.session_state["db_path"],
-                    st.session_state["al_token"],
-                    openai_embeddings(st.session_state["openai_token"]),
+                    embeddings,
                     load_to_db(st.session_state['repo_path'])
                 )
 
@@ -47,6 +50,10 @@ if st.session_state["auth_ok"]:
         pass
 
 if st.session_state["db_loaded"]:
+    if llm_option=='GPT-3.5':
+        llm = open_ai(st.session_state["openai_token"])
+    else:
+        llm = hf_inference(st.session_state["hf_endpoint"], st.session_state["hf_token"])
     for message in st.session_state["messages"]:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
@@ -60,11 +67,10 @@ if st.session_state["db_loaded"]:
             message_placeholder = st.empty()
             full_response = ""
             with st.spinner("Generating response..."):
-                qa = response_chain(
-                    st.session_state["db_path"], 
-                    openai_embeddings(st.session_state["openai_token"]),
-                    st.session_state["ai21_token"],
-                    st.session_state["al_token"]
+                qa = response_chain( 
+                    embeddings=embeddings,
+                    al_token=st.session_state["al_token"],
+                    llm=llm
                 )
 
                 result = qa({"question": prompt, "chat_history": st.session_state['messages']})

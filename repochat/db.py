@@ -1,13 +1,14 @@
 import os
+import streamlit as st
 
 from langchain.vectorstores import DeepLake
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.document_loaders import NotebookLoader, TextLoader
 
-def vector_db(db_path, al_token, embeddings, code):
+def vector_db(embeddings, code):
     db = DeepLake(
-        dataset_path=db_path,
-        token=al_token,
+        dataset_path=st.session_state["db_path"],
+        token=st.session_state["al_token"],
         embedding_function=embeddings
     )
 
