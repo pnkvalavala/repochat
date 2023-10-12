@@ -1,26 +1,60 @@
-# RepoChat
+# Repochat - GitHub Repository Interactive Chatbot
 
-This project enables users to have interactive conversations about a GitHub repository. By providing the necessary tokens and GitHub link, users can utilize the power of the OpenAI API for computing embeddings, as well as leverage the capabilities of the Deeplake Vector Database by Activeloop. The project currently supports Jurassic-2 LLM by AI21 Labs, but plans to incorporate open-source Hugging Face models like [StarChat-β](https://huggingface.co/HuggingFaceH4/starchat-beta) in the future.
+Repochat is an interactive chatbot that allows you to engage in dynamic conversations about GitHub repositories. Powered by a Large Language Models, you have the freedom to choose between two different options for the Language Model:
 
-## Usage
+1. **OpenAI GPT-3.5-turbo model**: Utilize OpenAI's cutting-edge language model to have conversations about GitHub repositories.
 
-To start a conversation about a specific GitHub repository, follow these steps:
+2. **Hugging Face Model**: Alternatively, you can opt for any model available on Hugging Face (preferably models like [CodeLlama-Instruct](https://huggingface.co/codellama/CodeLlama-13b-Instruct-hf)). However, this choice comes with the added responsibility of creating an endpoint for your chosen model on Hugging Face. You'll need to provide the endpoint URL and Hugging Face token for this option.
+
+## Branches
+
+Repochat offers two branches with distinct functionalities:
+
+### Main Branch
+
+The [main](https://github.com/pnkvalavala/repochat) branch of Repochat is designed to run entirely on your local machine. This version of Repochat doesn't rely on external API calls and offers greater control over your data and processing. If you're looking for a self-contained solution, the `main` branch is the way to go.
+
+### Cloud Branch
+
+The [cloud](https://github.com/pnkvalavala/repochat/tree/cloud) branch of Repochat primarily relies on API calls to external services for model inference and storage. It's well-suited for those who prefer a cloud-based solution and don't want to set up a local environment.
+
+## Features
+
+- Choose your preferred Language Model:
+  - OpenAI GPT-3.5-turbo
+  - Hugging Face Model (with custom endpoint)
+
+- Choose between two methods for calculating embeddings:
+  - OpenAI Embeddings
+  - Hugging Face's [Sentence Transformers](https://huggingface.co/docs/hub/sentence-transformers)
+
+- Utilize the power of Activeloop's Deeplake Vector Database for storing and retrieving embeddings.
+
+## Getting Started
+
+Follow the steps below to get started with Repochat:
+
+### Prerequisites
+
+- OpenAI API Key (for GPT-3.5-turbo and OpenAI Embeddings)
+- Hugging Face Endpoint (if using a custom model)
+- Hugging Face Token (if using a custom model)
+- ActiveLoop API (for Deeplake Vector Database)
+
+### Usage
 
 1. Open the [RepoChat](https://repochat.streamlit.app/) deployed on Streamlit.
-2. Enter all the tokens necessary. Your credentials are only stored in your session state.
-3. Enter the GitHub repository link in the provided input field.
-4. You can now chat and ask questions about the repository, which will be answered by the integrated LLM model (Jurassic-2).
 
-If you are interested in exploring GitHub repositories using a Discord bot, you can also check out [RepoBot](https://github.com/pavanvnk/RepoBot). RepoBot simplifies GitHub exploration and collaboration within Discord communities.
+2. Configure your preferred language model and embeddings method. Enter all the tokens necessary. Your credentials are only stored in your session state.
 
-Please note that the responses may take some time to generate, especially for larger repositories or complex queries. The system will indicate when the model is actively processing a request.
+3. Input the GitHub repository link you want to discuss. Repochat will fetch all files from the repository, chunk them into smaller files, and calculate and store their embeddings in the Deeplake Vector Database.
 
-## Future Enhancements
+4. Start asking questions! Repochat will retrieve relevant documents from the vector database and send them, along with your question, to the Language Model to provide answers.
 
-The RepoChat project aims to improve and expand its features in the future. Planned enhancements include:
+5. Enjoy interactive conversations about the GitHub repository with the retained memory of the chatbot.
 
-- Adding support for open-source Hugging Face models like StarChat-β.
-- Enhancing the user interface to provide a more intuitive and seamless chatting experience.
-- Optimizing the performance and response time of the system for larger repositories.
+If you are interested in exploring GitHub repositories using a Discord bot, you can also check out [RepoBot](https://github.com/pnkvalavala/RepoBot). RepoBot simplifies GitHub exploration and collaboration within Discord communities.
 
-Stay tuned for updates and new releases!
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
