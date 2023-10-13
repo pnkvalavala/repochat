@@ -8,15 +8,13 @@ def response_chain(db, llm):
     retriever = db.as_retriever()
     search_kwargs = {
         "k": 3,
-        "fetch_k": 30,
-        "distance_metric": "cos",
-        "maximal_marginal_relevance": True
+        "distance_metric": "cos"
     }
 
     retriever.search_kwargs.update(search_kwargs)
 
     memory = ConversationBufferMemory(
-        memory_key='history',
+        memory_key='chat_history',
         return_messages=True
     )
 

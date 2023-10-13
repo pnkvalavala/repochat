@@ -25,13 +25,18 @@ st.markdown(
 )
 
 try:
-    db_name, st.session_state['git_form'] = git_form(st.session_state['repo_path'])
+    st.session_state["db_name"], st.session_state['git_form'] = git_form(st.session_state['repo_path'])
 
     if st.session_state['git_form']:
         with st.spinner('Loading the contents to database. This may take some time...'):
             st.session_state["chroma_db"] = vector_db(
                 hf_embeddings(),
                 load_to_db(st.session_state['repo_path'])
+            )
+        with st.spinner('Loading model to memory'):
+            st.session_state["qa"] = response_chain( 
+                db=st.session_state["chroma_db"],
+                llm=code_llama()
             )
 
         st.session_state["db_loaded"] = True
@@ -52,12 +57,7 @@ if st.session_state["db_loaded"]:
             message_placeholder = st.empty()
             full_response = ""
             with st.spinner("Generating response..."):
-                qa = response_chain( 
-                    db=st.session_state["chroma_db"],
-                    llm=code_llama()
-                )
-
-                result = qa({"question": prompt, "chat_history": st.session_state['messages']})
+                result = st.session_state["qa"](prompt)
             for chunk in result['answer'].split():
                 full_response += chunk + " "
                 time.sleep(0.05)

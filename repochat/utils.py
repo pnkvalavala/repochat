@@ -10,7 +10,9 @@ def init_session_state():
         "chroma_db": None,
         "db_loaded": False,
         "repo_path": './cloned_repo',
-        "git_form": False
+        "git_form": False,
+        "qa": None,
+        "db_name": None
     }
 
     for keys, values in SESSION_DEFAULTS.items():

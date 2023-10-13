@@ -1,12 +1,17 @@
 import os
+import shutil
+import streamlit as st
 from langchain.vectorstores import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.document_loaders import NotebookLoader, TextLoader
 
 def vector_db(embeddings, code):
     collection_name = "db_collection"
-    local_directory = "db_directory"
+    local_directory = "db_" + st.session_state["db_name"]
     persist_directory = os.path.join(os.getcwd(), local_directory)
+    
+    if os.path.exists(persist_directory):
+        shutil.rmtree(persist_directory)
 
     vec_db = Chroma.from_documents(
         documents=code,
