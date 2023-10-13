@@ -2,6 +2,8 @@
 
 Repochat is an interactive chatbot project designed to engage in conversations about GitHub repositories using a Large Language Model (LLM). It allows users to have meaningful discussions, ask questions, and retrieve relevant information from a GitHub repository. This README provides step-by-step instructions for setting up and using Repochat on your local machine.
 
+https://github.com/pnkvalavala/repochat/assets/108526358/91819459-ddbf-4985-ab84-81c8c67da0e6
+
 ## Table of Contents
 
 - [Branches](#branches)
