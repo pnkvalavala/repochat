@@ -1,26 +1,138 @@
-# RepoChat
+# Repochat - GitHub Repository Interactive Chatbot
 
-This project enables users to have interactive conversations about a GitHub repository. By providing the necessary tokens and GitHub link, users can utilize the power of the OpenAI API for computing embeddings, as well as leverage the capabilities of the Deeplake Vector Database by Activeloop. The project currently supports Jurassic-2 LLM by AI21 Labs, but plans to incorporate open-source Hugging Face models like [StarChat-β](https://huggingface.co/HuggingFaceH4/starchat-beta) in the future.
+Repochat is an interactive chatbot project designed to engage in conversations about GitHub repositories using a Large Language Model (LLM). It allows users to have meaningful discussions, ask questions, and retrieve relevant information from a GitHub repository. This README provides step-by-step instructions for setting up and using Repochat on your local machine.
+
+## Table of Contents
+
+- [Branches](#branches)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Chatbot Functionality](#chatbot-functionality)
+- [Issues](#raising-issues)
+- [License](#license)
+
+## Branches
+
+Repochat offers two branches with distinct functionalities:
+
+### Main Branch
+
+The [main](https://github.com/pnkvalavala/repochat) branch of Repochat is designed to run entirely on your local machine. This version of Repochat doesn't rely on external API calls and offers greater control over your data and processing. If you're looking for a self-contained solution, the `main` branch is the way to go.
+
+### Cloud Branch
+
+The [cloud](https://github.com/pnkvalavala/repochat/tree/cloud) branch of Repochat primarily relies on API calls to external services for model inference and storage. It's well-suited for those who prefer a cloud-based solution and don't want to set up a local environment.
+
+
+## Installation
+
+To get started with Repochat, you'll need to follow these installation steps:
+
+1. Create a virtual environment and activate on your local machine to isolate the project's dependencies.
+   ```bash
+   python -m venv repochat-env
+   source repochat-env/bin/activate
+   ```
+
+2. Clone the Repochat repository and navigate to the project directory.
+   ```bash
+   git clone https://github.com/pnkvalavala/repochat.git
+   cd repochat
+   ```
+
+3. Install the required Python packages using `pip`.
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Install the "llama-cpp-python" library.
+   ```bash
+   pip install llama-cpp-python
+   ```
+
+   ### Installation with Hardware Acceleration
+
+    `llama.cpp` supports multiple BLAS backends for faster processing.
+
+    To install with OpenBLAS, set the `LLAMA_BLAS and LLAMA_BLAS_VENDOR` environment variables before installing:
+
+    ```bash
+    CMAKE_ARGS="-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS" pip install llama-cpp-python
+    ```
+
+    To install with cuBLAS, set the `LLAMA_CUBLAS=1` environment variable before installing:
+
+    ```bash
+    CMAKE_ARGS="-DLLAMA_CUBLAS=on" pip install llama-cpp-python
+    ```
+
+    To install with CLBlast, set the `LLAMA_CLBLAST=1` environment variable before installing:
+
+    ```bash
+    CMAKE_ARGS="-DLLAMA_CLBLAST=on" pip install llama-cpp-python
+    ```
+
+    To install with Metal (MPS), set the `LLAMA_METAL=on` environment variable before installing:
+
+    ```bash
+    CMAKE_ARGS="-DLLAMA_METAL=on" pip install llama-cpp-python
+    ```
+
+    To install with hipBLAS / ROCm support for AMD cards, set the `LLAMA_HIPBLAS=on` environment variable before installing:
+
+    ```bash
+    CMAKE_ARGS="-DLLAMA_HIPBLAS=on" pip install llama-cpp-python
+    ```
+
+    To get to know more about Hardware Acceleration, refer to official README from [llama-cpp-python](https://github.com/abetlen/llama-cpp-python)
+
+5. Create a folder named `models` in the project directory.
+
+6. Download a Language Model from the Hugging Face Model Hub based on your computer's capabilities. We recommend using the following model as a starting point: [TheBloke/CodeLlama-7B-GGUF](https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/blob/main/codellama-7b.Q4_K_M.gguf).
+
+7. Copy the downloaded model file to the "models" folder.
+
+8. Open the `models.py` file located in the "repochat" folder and set the model file location in the `code_llama()` function as follows:
+   ```python
+   def code_llama():
+       callbackmanager = CallbackManager([StreamingStdOutCallbackHandler()])
+       llm = LlamaCpp(
+           model_path="./models/codellama-7b.Q4_K_M.gguf",
+           n_ctx=2048,
+           max_tokens=200,
+           n_gpu_layers=1,
+           n_batch=512,
+           f16_kv=True,
+           callback_manager=callbackmanager,
+           verbose=True
+       )
+       return llm
+   ```
 
 ## Usage
 
-To start a conversation about a specific GitHub repository, follow these steps:
+1. Open your terminal and run the following command to start the Repochat application:
+   ```bash
+   streamlit run app.py
+   ```
 
-1. Open the [RepoChat](https://repochat.streamlit.app/) deployed on Streamlit.
-2. Enter all the tokens necessary. Your credentials are only stored in your session state.
-3. Enter the GitHub repository link in the provided input field.
-4. You can now chat and ask questions about the repository, which will be answered by the integrated LLM model (Jurassic-2).
+2. You can input the GitHub repository link you want to discuss.
 
-If you are interested in exploring GitHub repositories using a Discord bot, you can also check out [RepoBot](https://github.com/pavanvnk/RepoBot). RepoBot simplifies GitHub exploration and collaboration within Discord communities.
+3. Repochat will fetch all the files from the repository and store them in a folder named "cloned_repo." It will then split the files into smaller chunks and calculate their embeddings using the Sentence Transformers model, specifically [sentence-transformers/all-mpnet-base-v2](https://huggingface.co/sentence-transformers/all-mpnet-base-v2).
 
-Please note that the responses may take some time to generate, especially for larger repositories or complex queries. The system will indicate when the model is actively processing a request.
+4. The embeddings are stored locally in a vector database called ChromaDB.
 
-## Future Enhancements
+## Chatbot Functionality
 
-The RepoChat project aims to improve and expand its features in the future. Planned enhancements include:
+Repochat allows you to engage in conversations with the chatbot. You can ask questions or provide input, and the chatbot will retrieve relevant documents from the vector database. It then sends your input, along with the retrieved documents, to the Language Model for generating responses. By default, I've set the model to "codellama-7b-instruct," but you can change it based on your computer's speed, and you can even try the 13b quantized model for responses.
 
-- Adding support for open-source Hugging Face models like StarChat-β.
-- Enhancing the user interface to provide a more intuitive and seamless chatting experience.
-- Optimizing the performance and response time of the system for larger repositories.
+The chatbot retains memory during the conversation to provide contextually relevant responses.
 
-Stay tuned for updates and new releases!
+## Raising Issues
+
+If you encounter any issues, have suggestions, or want to report a bug, please visit the [Issues](https://github.com/pnkvalavala/repochat/issues) section of the Repochat repository and create a new issue. Provide detailed information about the problem you're facing, and I'll do my best to assist you.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

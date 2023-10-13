@@ -15,9 +15,9 @@ def code_llama():
         n_ctx=2048,
         max_tokens=200,
         n_gpu_layers=1,
-        n_batch=512,
         f16_kv=True,
         callback_manager=callbackmanager,
-        verbose=True
+        verbose=True,
+        use_mlock=True
     )
     return llm
