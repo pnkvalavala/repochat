@@ -1,8 +1,6 @@
 requests
 streamlit
-langchain
-openai
-deeplake
+langchain==0.0.313
+chromadb==0.4.14
 tiktoken
-huggingface_hub
 sentence-transformers

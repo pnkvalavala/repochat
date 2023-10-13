@@ -1,18 +1,23 @@
 import os
-import streamlit as st
-
-from langchain.vectorstores import DeepLake
-from langchain.text_splitter import CharacterTextSplitter
+from langchain.vectorstores import Chroma
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.document_loaders import NotebookLoader, TextLoader
 
 def vector_db(embeddings, code):
-    db = DeepLake(
-        dataset_path=st.session_state["db_path"],
-        token=st.session_state["al_token"],
-        embedding_function=embeddings
+    collection_name = "db_collection"
+    local_directory = "db_directory"
+    persist_directory = os.path.join(os.getcwd(), local_directory)
+
+    vec_db = Chroma.from_documents(
+        documents=code,
+        embedding=embeddings,
+        collection_name=collection_name,
+        persist_directory=persist_directory
     )
 
-    db.add_documents(code)
+    vec_db.persist()
+
+    return vec_db
 
 def load_to_db(repo_path):
     docs = []
@@ -33,6 +38,6 @@ def load_to_db(repo_path):
             except Exception as e:
                 pass
             
-    code_splitter = CharacterTextSplitter(chunk_size=1024, chunk_overlap=0)
+    code_splitter = RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=200)
     code = code_splitter.split_documents(docs)
     return code

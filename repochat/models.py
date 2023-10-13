@@ -1,29 +1,23 @@
-from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.llms import LlamaCpp
 from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.llms import OpenAI
-from langchain.llms import HuggingFaceEndpoint
-
-
-def openai_embeddings(openai_api):
-    return OpenAIEmbeddings(
-        model="text-embedding-ada-002",
-        openai_api_key=openai_api,
-        disallowed_special=()
-    )
-
-def open_ai(openai_api):
-    return OpenAI(
-        model="gpt-3.5-turbo", 
-        openai_api_key=openai_api
-    )
+from langchain.callbacks.manager import CallbackManager
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 
 def hf_embeddings():
     return HuggingFaceEmbeddings(
         model_name = "sentence-transformers/all-mpnet-base-v2",
     )
 
-def hf_inference(endpoint, hf_token):
-    return HuggingFaceEndpoint(
-        endpoint_url=endpoint,
-        huggingfacehub_api_token=hf_token
+def code_llama():
+    callbackmanager = CallbackManager([StreamingStdOutCallbackHandler()])
+    llm = LlamaCpp(
+        model_path="./models/codellama-7b.Q4_K_M.gguf",
+        n_ctx=2048,
+        max_tokens=200,
+        n_gpu_layers=1,
+        n_batch=512,
+        f16_kv=True,
+        callback_manager=callbackmanager,
+        verbose=True
     )
+    return llm

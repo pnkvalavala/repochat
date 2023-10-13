@@ -2,10 +2,9 @@ import time
 import streamlit as st
 
 from repochat.utils import init_session_state
-from repochat.credentials import credentials
 from repochat.git import git_form
 from repochat.db import vector_db, load_to_db
-from repochat.models import *
+from repochat.models import hf_embeddings, code_llama
 from repochat.chain import response_chain
 
 init_session_state()
@@ -25,35 +24,21 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-embedding_option, llm_option = credentials()
+try:
+    db_name, st.session_state['git_form'] = git_form(st.session_state['repo_path'])
 
-if st.session_state["auth_ok"]:
-    try:
-        db_name, st.session_state['git_form'] = git_form(st.session_state['repo_path'])
+    if st.session_state['git_form']:
+        with st.spinner('Loading the contents to database. This may take some time...'):
+            st.session_state["chroma_db"] = vector_db(
+                hf_embeddings(),
+                load_to_db(st.session_state['repo_path'])
+            )
 
-        if st.session_state['git_form']:
-            st.session_state["db_path"] = f"hub://{st.session_state['al_org_name']}/{db_name}"
-
-            if embedding_option=='OpenAI':
-                embeddings = openai_embeddings(st.session_state["openai_token"])
-            else:
-                embeddings = hf_embeddings()
-
-            with st.spinner('Loading the contents to database. This may take some time...'):
-                vector_db(
-                    embeddings,
-                    load_to_db(st.session_state['repo_path'])
-                )
-
-            st.session_state["db_loaded"] = True
-    except TypeError:
-        pass
+        st.session_state["db_loaded"] = True
+except TypeError:
+    pass
 
 if st.session_state["db_loaded"]:
-    if llm_option=='GPT-3.5':
-        llm = open_ai(st.session_state["openai_token"])
-    else:
-        llm = hf_inference(st.session_state["hf_endpoint"], st.session_state["hf_token"])
     for message in st.session_state["messages"]:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
@@ -68,9 +53,8 @@ if st.session_state["db_loaded"]:
             full_response = ""
             with st.spinner("Generating response..."):
                 qa = response_chain( 
-                    embeddings=embeddings,
-                    al_token=st.session_state["al_token"],
-                    llm=llm
+                    db=st.session_state["chroma_db"],
+                    llm=code_llama()
                 )
 
                 result = qa({"question": prompt, "chat_history": st.session_state['messages']})

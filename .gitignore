@@ -1,6 +1,8 @@
 # Tmp folder created during execution
 cloned_repo/
 repo_env/
+db_directory/
+models/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
