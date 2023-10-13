@@ -7,7 +7,6 @@ Repochat is an interactive chatbot project designed to engage in conversations a
 - [Branches](#branches)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Configuration](#configuration)
 - [Chatbot Functionality](#chatbot-functionality)
 - [Issues](#raising-issues)
 - [License](#license)
@@ -47,6 +46,7 @@ To get started with Repochat, you'll need to follow these installation steps:
    ```
 
 4. Install the "llama-cpp-python" library.
+    ### Installation without Hardware Acceleration
    ```bash
    pip install llama-cpp-python
    ```
@@ -89,7 +89,7 @@ To get started with Repochat, you'll need to follow these installation steps:
 
 5. Create a folder named `models` in the project directory.
 
-6. Download a Language Model from the Hugging Face Model Hub based on your computer's capabilities. We recommend using the following model as a starting point: [TheBloke/CodeLlama-7B-GGUF](https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/blob/main/codellama-7b.Q4_K_M.gguf).
+6. Download a Language Model from the Hugging Face Model Hub based on your computer's capabilities. It is recommended using the following model as a starting point: [TheBloke/CodeLlama-7B-GGUF](https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/blob/main/codellama-7b.Q4_K_M.gguf). If you want to quantize a model available on Hugging Face, follow the instructions from [llama.cpp](https://github.com/ggerganov/llama.cpp)
 
 7. Copy the downloaded model file to the "models" folder.
 
@@ -102,10 +102,10 @@ To get started with Repochat, you'll need to follow these installation steps:
            n_ctx=2048,
            max_tokens=200,
            n_gpu_layers=1,
-           n_batch=512,
            f16_kv=True,
            callback_manager=callbackmanager,
-           verbose=True
+           verbose=True,
+           use_mlock=True
        )
        return llm
    ```
@@ -117,7 +117,7 @@ To get started with Repochat, you'll need to follow these installation steps:
    streamlit run app.py
    ```
 
-2. You can input the GitHub repository link you want to discuss.
+2. You can now input the GitHub repository link.
 
 3. Repochat will fetch all the files from the repository and store them in a folder named "cloned_repo." It will then split the files into smaller chunks and calculate their embeddings using the Sentence Transformers model, specifically [sentence-transformers/all-mpnet-base-v2](https://huggingface.co/sentence-transformers/all-mpnet-base-v2).
 
