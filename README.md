@@ -41,7 +41,7 @@ Follow the steps below to get started with Repochat:
 - Hugging Face Token (if using a custom model)
 - ActiveLoop API (for Deeplake Vector Database)
 
-### Usage
+### Cloud Usage
 
 1. Open the [RepoChat](https://repochat.streamlit.app/) deployed on Streamlit.
 
@@ -53,7 +53,39 @@ Follow the steps below to get started with Repochat:
 
 5. Enjoy interactive conversations about the GitHub repository with the retained memory of the chatbot.
 
-If you are interested in exploring GitHub repositories using a Discord bot, you can also check out [RepoBot](https://github.com/pnkvalavala/RepoBot). RepoBot simplifies GitHub exploration and collaboration within Discord communities.
+### Local Usage
+
+If you prefer to run the RepoChat project locally and avoid entering your API tokens into Streamlit, you can follow these steps:
+
+1. Create a virtual environment and activate on your local machine to isolate the project's dependencies
+
+   ```bash
+   python -m venv repo_env
+   source repo_env/bin/activate
+   ```
+
+2. Clone the Repochat repository and navigate to the project directory
+
+   ```bash
+   git clone -b cloud https://github.com/pnkvalavala/repochat.git
+   cd repochat
+   ```
+
+3. Install the required Python packages using `pip`
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Run RepoChat Locally
+
+   ```bash
+   streamlit run app.py
+   ```
+
+Rest all instructions remain same as [Cloud Usage](#cloud-usage)
+
+By following these instructions, you can use RepoChat without relying on a cloud-based deployment, keeping your API tokens and credentials secure on your local environment.
 
 ## License
 
