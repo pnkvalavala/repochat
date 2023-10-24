@@ -39,8 +39,8 @@ def url_name(url):
         st.stop()
 
 def clone_repo(git_url, repo_path):
-    # if os.path.exists(repo_path):
-        # shutil.rmtree(repo_path)
+    if os.path.exists(repo_path):
+        shutil.rmtree(repo_path)
 
     command = f'git clone {git_url}.git {repo_path} && rm -rf {repo_path}/.git'
     subprocess.run(command, shell=True)
