@@ -1,8 +1,7 @@
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.llms import OpenAI
+from langchain.chat_models import ChatOpenAI
 from langchain.llms import HuggingFaceEndpoint
-
 
 def openai_embeddings(openai_api):
     return OpenAIEmbeddings(
@@ -12,7 +11,7 @@ def openai_embeddings(openai_api):
     )
 
 def open_ai(openai_api):
-    return OpenAI(
+    return ChatOpenAI(
         model="gpt-3.5-turbo", 
         openai_api_key=openai_api
     )

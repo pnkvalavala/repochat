@@ -16,7 +16,11 @@ def init_session_state():
         "db_path": None,
         "db_loaded": False,
         "repo_path": './cloned_repo',
-        "git_form": False
+        "git_form": False,
+        "embeddings": None,
+        "llm": 1,
+        "deeplake_db": None,
+        "qa": None
     }
 
     for keys, values in SESSION_DEFAULTS.items():
@@ -35,8 +39,8 @@ def url_name(url):
         st.stop()
 
 def clone_repo(git_url, repo_path):
-    if os.path.exists(repo_path):
-        shutil.rmtree(repo_path)
+    # if os.path.exists(repo_path):
+        # shutil.rmtree(repo_path)
 
     command = f'git clone {git_url}.git {repo_path} && rm -rf {repo_path}/.git'
     subprocess.run(command, shell=True)

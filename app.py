@@ -1,4 +1,3 @@
-import time
 import streamlit as st
 
 from repochat.utils import init_session_state
@@ -35,13 +34,18 @@ if st.session_state["auth_ok"]:
             st.session_state["db_path"] = f"hub://{st.session_state['al_org_name']}/{db_name}"
 
             if embedding_option=='OpenAI':
-                embeddings = openai_embeddings(st.session_state["openai_token"])
+                st.session_state['embeddings'] = openai_embeddings(st.session_state["openai_token"])
             else:
-                embeddings = hf_embeddings()
+                st.session_state['embeddings'] = hf_embeddings()
+            
+            if llm_option=='GPT-3.5':
+                st.session_state['llm'] = open_ai(st.session_state["openai_token"])
+            else:
+                st.session_state['llm'] = hf_inference(st.session_state["hf_endpoint"], st.session_state["hf_token"])
 
             with st.spinner('Loading the contents to database. This may take some time...'):
-                vector_db(
-                    embeddings,
+                st.session_state["deeplake_db"] = vector_db(
+                    st.session_state['embeddings'],
                     load_to_db(st.session_state['repo_path'])
                 )
 
@@ -50,10 +54,11 @@ if st.session_state["auth_ok"]:
         pass
 
 if st.session_state["db_loaded"]:
-    if llm_option=='GPT-3.5':
-        llm = open_ai(st.session_state["openai_token"])
-    else:
-        llm = hf_inference(st.session_state["hf_endpoint"], st.session_state["hf_token"])
+    st.session_state["qa"] = response_chain( 
+        db=st.session_state["deeplake_db"],
+        llm=st.session_state['llm']
+    )
+    
     for message in st.session_state["messages"]:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
@@ -67,16 +72,6 @@ if st.session_state["db_loaded"]:
             message_placeholder = st.empty()
             full_response = ""
             with st.spinner("Generating response..."):
-                qa = response_chain( 
-                    embeddings=embeddings,
-                    al_token=st.session_state["al_token"],
-                    llm=llm
-                )
-
-                result = qa({"question": prompt, "chat_history": st.session_state['messages']})
-            for chunk in result['answer'].split():
-                full_response += chunk + " "
-                time.sleep(0.05)
-                message_placeholder.markdown(full_response + "▌")
-            message_placeholder.markdown(full_response)
-        st.session_state["messages"].append({"role": "assistant", "content": full_response})
+                result = st.session_state["qa"]({"question": prompt, "chat_history": st.session_state['messages']})
+                st.write(result['answer'])
+        st.session_state["messages"].append({"role": "assistant", "content": result['answer']})

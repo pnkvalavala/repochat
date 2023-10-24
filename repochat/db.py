@@ -13,6 +13,7 @@ def vector_db(embeddings, code):
     )
 
     db.add_documents(code)
+    return db
 
 def load_to_db(repo_path):
     docs = []
