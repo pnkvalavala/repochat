@@ -89,4 +89,5 @@ By following these instructions, you can use RepoChat without relying on a cloud
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0). For details, see the [LICENSE](LICENSE) file.
+Please note that this is a change from the previous license, and it's important to review the terms and conditions of the new license.
