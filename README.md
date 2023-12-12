@@ -6,6 +6,8 @@ Repochat is an interactive chatbot that allows you to engage in dynamic conversa
 
 2. **Hugging Face Model**: Alternatively, you can opt for any model available on Hugging Face (preferably models like [CodeLlama-Instruct](https://huggingface.co/codellama/CodeLlama-13b-Instruct-hf)). However, this choice comes with the added responsibility of creating an endpoint for your chosen model on Hugging Face. You'll need to provide the endpoint URL and Hugging Face token for this option.
 
+https://github.com/pnkvalavala/repochat/assets/108526358/393f1367-d6e7-4b98-afc2-138b5b2dbcf4
+
 ## Branches
 
 Repochat offers two branches with distinct functionalities:
