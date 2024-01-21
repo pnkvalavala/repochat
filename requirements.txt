@@ -1,8 +1,8 @@
-requests
-streamlit
-langchain
-openai
-deeplake
-tiktoken
-huggingface_hub
-sentence-transformers
+requests==2.31.0
+streamlit==1.28.0
+langchain==0.0.313
+openai==0.28.1
+deeplake==3.8.1
+tiktoken==0.5.1
+huggingface_hub==0.18.0
+sentence-transformers==2.2.2
